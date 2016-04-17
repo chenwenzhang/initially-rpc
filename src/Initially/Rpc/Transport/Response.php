@@ -1,6 +1,7 @@
 <?php
 namespace Initially\Rpc\Transport;
 
+use Initially\Rpc\Core\Support\Version;
 use Throwable;
 
 class Response
@@ -31,7 +32,7 @@ class Response
      */
     public function __construct()
     {
-        $this->version = "";
+        $this->version = Version::get();
         $this->hasException = false;
     }
 
@@ -60,17 +61,17 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return Throwable
      */
     public function getException()
     {
-        return $this->result;
+        return $this->exception;
     }
 
     /**
      * @param Throwable $exception
      */
-    public function setException($exception)
+    public function setException(Throwable $exception)
     {
         $this->exception = $exception;
     }

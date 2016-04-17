@@ -1,6 +1,8 @@
 <?php
 namespace Initially\Rpc\Transport;
 
+use Initially\Rpc\Core\Support\Version;
+
 class Request
 {
 
@@ -29,7 +31,7 @@ class Request
      */
     public function __construct()
     {
-        $this->version = "";
+        $this->version = Version::get();
     }
 
     /**

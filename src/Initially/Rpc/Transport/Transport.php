@@ -1,17 +1,49 @@
 <?php
 namespace Initially\Rpc\Transport;
 
+use Initially\Rpc\Core\Config\Factory;
 use Initially\Rpc\Exception\InitiallyRpcException;
+use Initially\Rpc\Transport\Protocol\Http;
+use Throwable;
 
 class Transport
 {
 
     /**
      * @param Request $request
+     * @throws InitiallyRpcException
+     * @throws Throwable
      */
     public function send(Request $request)
     {
+        $interface = $request->getInterface();
+        $config = Factory::getClient($interface);
+        $url = $config->getUrl();
         $requestRaw = Formatter::serialize($request);
+        $responseRaw = $this->postData($url, $requestRaw);
+        $response = Formatter::unserialize($responseRaw);
+        if (!($response instanceof Response)) {
+            throw new InitiallyRpcException("illegal response");
+        } elseif ($response->isHasException()) {
+            throw $response->getException();
+        }
+        return $response->getResult();
+    }
+
+    /**
+     * @param string $uri
+     * @param string $data
+     * @return string
+     * @throws InitiallyRpcException
+     */
+    private function postData($uri, $data)
+    {
+        static $protocol;
+        if (!isset($protocol)) {
+            $protocol = new Http();
+        }
+
+        return $protocol->sendData($uri, $data);
     }
 
     /**
