@@ -54,7 +54,7 @@ class ServerApplication implements Application
     public function run()
     {
         // exception handler
-        set_exception_handler("ServerApplication::exceptionHandler");
+        set_exception_handler(array($this, "exceptionHandler"));
         // set as global
         $this->setAsGlobal();
         // load server config
@@ -123,11 +123,11 @@ class ServerApplication implements Application
     /**
      * @param \Throwable $e
      */
-    public static function exceptionHandler($e) {
+    public function exceptionHandler($e) {
         $response = new Response();
         $response->setException($e);
         $response->setHasException(true);
-        self::$instance->transport->reply($response);
+        $this->transport->reply($response);
     }
 
 }
