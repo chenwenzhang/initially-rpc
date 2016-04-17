@@ -24,5 +24,8 @@
     {
       "packagist": false
     }
-  ]
+  ],
+  "scripts": {
+    "post-update-cmd": "Initially\\Rpc\\Core\\Engine\\ComposerScriptHandler::rebuildClientServiceProxy"
+  }
 }
