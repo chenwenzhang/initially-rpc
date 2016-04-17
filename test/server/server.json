@@ -1,0 +1,8 @@
+{
+  "services": [
+    {
+      "interface": "InitiallyDemo\\Common\\Interfaces\\UserQueryServiceInterface",
+      "reference": "InitiallyDemo\\Vendor\\Service\\UserQueryService"
+    }
+  ]
+}

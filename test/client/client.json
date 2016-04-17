@@ -1,0 +1,10 @@
+{
+  "global": {
+    "url": "http://localhost:8081/server.php"
+  },
+  "services": [
+    {
+      "interface": "InitiallyDemo\\Common\\Interfaces\\UserQueryServiceInterface"
+    }
+  ]
+}
