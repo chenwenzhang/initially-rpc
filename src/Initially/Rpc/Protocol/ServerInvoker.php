@@ -1,6 +1,7 @@
 <?php
 namespace Initially\Rpc\Protocol;
 
+use Initially\Rpc\Core\Engine\ServerApplication;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Formatter;
 use Initially\Rpc\Transport\Response;
@@ -41,15 +42,7 @@ class ServerInvoker implements Invoker
 
         $response = new Response();
         $response->setResult($result);
-        $this->replay($response);
-    }
-
-    /**
-     * @param Response $response
-     */
-    private function replay(Response $response)
-    {
-        echo Formatter::serialize($response);
+        ServerApplication::getInstance()->getTransport()->reply($response);
     }
 
 }

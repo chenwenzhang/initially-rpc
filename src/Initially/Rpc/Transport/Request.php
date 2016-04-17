@@ -12,7 +12,7 @@ class Request
     /**
      * @var string
      */
-    private $type;
+    private $interface;
 
     /**
      * @var string
@@ -43,17 +43,17 @@ class Request
     /**
      * @return string
      */
-    public function getType()
+    public function getInterface()
     {
-        return $this->type;
+        return $this->interface;
     }
 
     /**
-     * @param string $type
+     * @param string $interface
      */
-    public function setType($type)
+    public function setInterface($interface)
     {
-        $this->type = $type;
+        $this->interface = $interface;
     }
 
     /**

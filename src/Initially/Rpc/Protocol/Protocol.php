@@ -7,15 +7,23 @@ use Initially\Rpc\Protocol\ServerInvoker;
 class Protocol
 {
 
+    /**
+     * @param string $target
+     * @return ServerInvoker
+     */
     public function export($target)
     {
         $invoker = new ServerInvoker($target);
         return $invoker;
     }
 
-    public function refer($type)
+    /**
+     * @param string $interface
+     * @return ClientInvoker
+     */
+    public function refer($interface)
     {
-        $invoker = new ClientInvoker($type);
+        $invoker = new ClientInvoker($interface);
         return $invoker;
     }
 

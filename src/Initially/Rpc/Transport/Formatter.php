@@ -10,7 +10,7 @@ class Formatter
      */
     public static function serialize($value)
     {
-        return "";
+        return serialize($value);
     }
 
     /**
@@ -19,8 +19,7 @@ class Formatter
      */
     public static function unserialize($string)
     {
-
-        return "";
+        return unserialize($string);
     }
 
 }
