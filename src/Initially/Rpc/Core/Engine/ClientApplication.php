@@ -1,11 +1,12 @@
 <?php
 namespace Initially\Rpc\Core\Engine;
 
+use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
 use Initially\Rpc\Core\Support\Registry;
 use Initially\Rpc\Core\Support\Util;
 use Initially\Rpc\Exception\InitiallyRpcException;
-use Initially\Rpc\Proxy\Builder;
+use Initially\Rpc\Proxy\Builder as ProxyBuilder;
 use Initially\Rpc\Transport\Transport;
 
 class ClientApplication implements Application
@@ -41,14 +42,21 @@ class ClientApplication implements Application
             return new Transport();
         });
 
-        if (null !== ($clientConfigFileInfo = Util::getClientConfigFileInfo()) &&
+        if (null === ($clientConfigFileInfo = Util::getClientConfigFileInfo()) ||
             Util::isFileModify($clientConfigFileInfo["file"], $clientConfigFileInfo["last"])) {
-
+            $proxyBuilder = new ProxyBuilder();
+            $clientConfigs = ConfigFactory::getClientAll();
+            foreach ($clientConfigs as $config) {
+                $proxyBuilder->createProxy($config->getInterface());
+            }
         }
 
         $this->recordClientConfigFileInfo();
     }
 
+    /**
+     * Record client config file info
+     */
     private function recordClientConfigFileInfo()
     {
         $arr = array(

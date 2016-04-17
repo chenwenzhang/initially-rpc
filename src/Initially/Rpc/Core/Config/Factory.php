@@ -54,6 +54,14 @@ class Factory
     }
 
     /**
+     * @return array
+     */
+    public static function getClientAll()
+    {
+        return self::$clientMapping;
+    }
+
+    /**
      * @param string $key
      * @param Client $config
      */

@@ -14,4 +14,6 @@ class Constants
 
     const CACHE_CONFIG_FILENAME = "clientConfig.cache";
 
+    const PROXY_PREFIX_NAMESPACE = "Initially\\Rpc\\Api";
+
 }

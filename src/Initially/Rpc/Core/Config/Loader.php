@@ -1,6 +1,8 @@
 <?php
 namespace Initially\Rpc\Core\Config;
 
+use Initially\Rpc\Core\Config\Client\Client;
+use Initially\Rpc\Core\Config\Server\Server;
 use Initially\Rpc\Exception\InitiallyRpcException;
 
 class Loader
@@ -8,6 +10,20 @@ class Loader
 
     /**
      * Load client config
+     *   <format>
+     *     {
+     *       "global": {
+     *         "url": ""
+     *       },
+     *       "services": [
+     *         {
+     *           "interface": "",
+     *           "url": ""
+     *         },
+     *         ...
+     *       ]
+     *     }
+     *   </format>
      *
      * @param string $configFile
      * @throws InitiallyRpcException
@@ -15,13 +31,47 @@ class Loader
     public static function loadClient($configFile)
     {
         if (!is_file($configFile)) {
-            throw new InitiallyRpcException();
+            throw new InitiallyRpcException("Client config file is missing");
         }
-        $config = file_get_contents($configFile);
+
+        $clientConfig = json_decode(file_get_contents($configFile), true);
+        if (!is_array($clientConfig)) {
+            throw new InitiallyRpcException("Client config error");
+        }
+
+        $globalConfig = isset($clientConfig["global"]) ? $clientConfig["global"] : array();
+        $isSetGlobalUrl = isset($globalConfig["url"]);
+        if (isset($clientConfig["services"]) && !empty($clientConfig["services"])) {
+            foreach ($clientConfig["services"] as $serviceConfig) {
+                if (
+                    !is_array($serviceConfig) ||
+                    !isset($serviceConfig["interface"]) ||
+                    (
+                        !isset($serviceConfig["url"]) &&
+                        !$isSetGlobalUrl
+                    )
+                ) {
+                    throw new InitiallyRpcException("Client service config error");
+                }
+                $url = isset($serviceConfig["url"]) ? $serviceConfig["url"] : $globalConfig["url"];
+                Factory::setClient($serviceConfig["interface"], new Client($url, $serviceConfig["interface"]));
+            }
+        }
     }
 
     /**
      * Load server config
+     *   <format>
+     *     {
+     *       "services": [
+     *         {
+     *           "interface": "",
+     *           "reference": ""
+     *         },
+     *         ...
+     *       ]
+     *     }
+     *   </format>
      *
      * @param string $configFile
      * @throws InitiallyRpcException
@@ -29,7 +79,26 @@ class Loader
     public static function loadServer($configFile)
     {
         if (!is_file($configFile)) {
-            throw new InitiallyRpcException();
+            throw new InitiallyRpcException("Server config file is missing");
+        }
+
+        $serverConfig = json_decode(file_get_contents($configFile), true);
+        if (!is_array($serverConfig)) {
+            throw new InitiallyRpcException("Server config error");
+        }
+
+        if (isset($serverConfig["services"]) && !empty($serverConfig["services"])) {
+            foreach ($serverConfig["services"] as $serviceConfig) {
+                if (
+                    !is_array($serviceConfig) ||
+                    !isset($serviceConfig["interface"]) ||
+                    !isset($serviceConfig["reference"])
+                ) {
+                    throw new InitiallyRpcException("Server service config error");
+                }
+                $config = new Server($serviceConfig["interface"], $serviceConfig["reference"]);
+                Factory::setServer($serviceConfig["interface"], $config);
+            }
         }
     }
 
