@@ -71,7 +71,7 @@ class Response
     /**
      * @param Throwable $exception
      */
-    public function setException(Throwable $exception)
+    public function setException($exception)
     {
         $this->exception = $exception;
     }

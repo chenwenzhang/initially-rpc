@@ -16,6 +16,14 @@
       "Initially\\Rpc\\": "src/Initially/Rpc/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "InitiallyDemo\\": [
+        "test/client/Demo/",
+        "test/server/Demo/"
+      ]
+    }
+  },
   "repositories": [
     {
       "type": "composer",

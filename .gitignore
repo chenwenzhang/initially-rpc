@@ -1,6 +1,5 @@
 .idea/
-vendor/
+/vendor/
 composer.lock
 src/var/
 src/Initially/Rpc/Api/
-test/

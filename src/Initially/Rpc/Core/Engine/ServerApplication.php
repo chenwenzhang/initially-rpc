@@ -4,8 +4,8 @@ namespace Initially\Rpc\Core\Engine;
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
 use Initially\Rpc\Exception\InitiallyRpcException;
-use Initially\Rpc\Protocol;
 use Initially\Rpc\Protocol\Invocation;
+use Initially\Rpc\Protocol\Protocol;
 use Initially\Rpc\Transport\Response;
 use Initially\Rpc\Transport\Transport;
 
@@ -67,7 +67,7 @@ class ServerApplication implements Application
             $invocation = new Invocation($request->getMethodName(), $request->getArguments());
             $invoker->invoke($invocation);
         } else {
-
+            echo "GET";
         }
     }
 
@@ -101,7 +101,8 @@ class ServerApplication implements Application
      */
     private function getTarget($interface)
     {
-        $reference = ConfigFactory::getServer($interface);
+        $config = ConfigFactory::getServer($interface);
+        $reference = $config->getReference();
         if (!class_exists($reference)) {
             throw new InitiallyRpcException("reference class not exists");
         }
@@ -114,7 +115,7 @@ class ServerApplication implements Application
      */
     public static function getInstance()
     {
-        if (!is_null(self::$instance)) {
+        if (is_null(self::$instance)) {
             throw new InitiallyRpcException("server application is not global");
         }
         return self::$instance;

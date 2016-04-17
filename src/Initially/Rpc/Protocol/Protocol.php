@@ -1,5 +1,5 @@
 <?php
-namespace Initially\Rpc;
+namespace Initially\Rpc\Protocol;
 
 use Initially\Rpc\Protocol\ClientInvoker;
 use Initially\Rpc\Protocol\ServerInvoker;
