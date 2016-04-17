@@ -3,6 +3,7 @@ namespace Initially\Rpc\Core\Engine;
 
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
 use Initially\Rpc\Core\Support\Registry;
+use Initially\Rpc\Core\Support\Util;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Proxy\Builder;
 use Initially\Rpc\Transport\Transport;

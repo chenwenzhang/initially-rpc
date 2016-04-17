@@ -1,5 +1,5 @@
 <?php
-namespace Initially\Rpc\Core\Engine;
+namespace Initially\Rpc\Core\Support;
 
 define("INITIALLY_RPC_ROOT", dirname(dirname(dirname(dirname(__DIR__)))));
 
