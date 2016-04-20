@@ -72,6 +72,7 @@ class Transport
      */
     public function reply(Response $response)
     {
+        header("Content-Type: text/plain;charset=utf-8");
         echo Formatter::serialize($response);
     }
 
