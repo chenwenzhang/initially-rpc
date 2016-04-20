@@ -1,6 +1,7 @@
 {
   "name": "chenwenzhang/initially-rpc",
   "description": "Rpc",
+  "license": "MIT",
   "authors": [
     {
       "name": "chenwenzhang",
