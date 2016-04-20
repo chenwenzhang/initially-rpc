@@ -21,7 +21,7 @@
             color: #222;
         }
         h2 {
-            font: normal 20px/22px Georgia, Times, "Times New Roman", serif;
+            font: normal 16px Georgia, Times, "Times New Roman", serif;
             padding: 5px 0 8px;
             margin: 20px 10px 0;
             border-bottom: 1px solid #ddd;
