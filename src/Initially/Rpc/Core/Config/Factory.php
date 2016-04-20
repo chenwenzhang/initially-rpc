@@ -32,6 +32,14 @@ class Factory
     }
 
     /**
+     * @return array
+     */
+    public static function getServerAll()
+    {
+        return self::$serverMapping;
+    }
+
+    /**
      * @param string $key
      * @param Server $config
      */

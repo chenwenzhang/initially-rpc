@@ -3,6 +3,7 @@ namespace Initially\Rpc\Core\Engine;
 
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
+use Initially\Rpc\Core\Web\App;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Protocol\Invocation;
 use Initially\Rpc\Protocol\Protocol;
@@ -67,7 +68,8 @@ class ServerApplication implements Application
             $invocation = new Invocation($request->getMethodName(), $request->getArguments());
             $invoker->invoke($invocation);
         } else {
-            echo "GET";
+            $webApp = new App();
+            $webApp->handle();
         }
     }
 
