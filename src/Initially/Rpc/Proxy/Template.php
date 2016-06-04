@@ -15,12 +15,18 @@ class Template
     private $methodTpl;
 
     /**
+     * @var string
+     */
+    private $methodTplForPHP7;
+
+    /**
      * Template constructor.
      */
     public function __construct()
     {
         $this->_initClassTpl();
         $this->_initMethodTpl();
+        $this->_initMethodTplForPHP7();
     }
 
     /**
@@ -37,6 +43,14 @@ class Template
     public function getMethodTpl()
     {
         return $this->methodTpl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethodTplForPHP7()
+    {
+        return $this->methodTplForPHP7;
     }
 
     /**
@@ -87,6 +101,22 @@ CLASSTPL;
 
     __METHOD_DOC__
     public function __METHOD__(__PARAMETER__)
+    {
+        return \$this->handle->invoke("__METHOD__", array(__ARGUMENT__));
+    }
+
+METHODTPL;
+    }
+
+    /**
+     * init method tpl
+     */
+    private function _initMethodTplForPHP7()
+    {
+        $this->methodTpl = <<< METHODTPL
+
+    __METHOD_DOC__
+    public function __METHOD__(__PARAMETER__)__RETURN_TYPE__
     {
         return \$this->handle->invoke("__METHOD__", array(__ARGUMENT__));
     }

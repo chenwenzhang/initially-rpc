@@ -58,6 +58,7 @@ class Builder
      */
     public function createProxy($interface)
     {
+        $isPHP7 = version_compare(PHP_VERSION, "7.0.0", ">=");
         $this->methodUseClasses = array();
         $reflection = new ReflectionClass($interface);
         if (!$reflection->isInterface()) {
@@ -70,7 +71,7 @@ class Builder
 
         $methodString = "";
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            $methodString .= $this->buildMethodString($method);
+            $methodString .= $isPHP7 ? $this->buildMethodStringForPHP7($method) : $this->buildMethodString($method);
         }
 
         $useString = "";
@@ -145,6 +146,70 @@ class Builder
             $method->getDocComment(),
             $method->getName(),
             trim($paramString, " ,"),
+            trim($argumentString, " ,")
+        );
+        return str_replace($searches, $replaces, $this->template->getMethodTpl());
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @return string
+     */
+    private function buildMethodStringForPHP7(ReflectionMethod $method)
+    {
+        $argumentString = "";
+        $paramString = "";
+        foreach ($method->getParameters() as $parameter) {
+            $argumentString .= "\${$parameter->getName()}, ";
+            $parameterType = $parameter->getType();
+            if (!is_null($parameterType)) {
+                $typeString = $parameterType->__toString();
+                if (!$parameterType->isBuiltin()) {
+                    if (!in_array($typeString, $this->methodUseClasses)) {
+                        $this->methodUseClasses[] = $typeString;
+                    }
+                    $tmpArr = explode("\\", $typeString);
+                    $typeString = array_pop($tmpArr);
+                }
+                $paramString .= $typeString . " \${$parameter->getName()}";
+            } else {
+                $paramString .= "\${$parameter->getName()}";
+            }
+            if ($parameter->isDefaultValueAvailable()) {
+                $defaultValue = $parameter->getDefaultValue();
+                if (is_array($defaultValue)) {
+                    $paramString .= " = " . str_replace("\n", "", var_export($defaultValue, true));
+                } elseif (is_string($defaultValue)) {
+                    $paramString .= " = \"{$defaultValue}\"";
+                } elseif (is_null($defaultValue)) {
+                    $paramString .= " = null";
+                } elseif (is_bool($defaultValue)) {
+                    $paramString .= " = " . ($defaultValue ? "true" : "false");
+                } else {
+                    $paramString .= " = {$defaultValue}";
+                }
+            }
+            $paramString .= ", ";
+        }
+        $returnString = "";
+        $methodReturn = $method->getReturnType();
+        if (!is_null($methodReturn)) {
+            $typeString = $methodReturn->__toString();
+            if (!$methodReturn->isBuiltin()) {
+                if (!in_array($typeString, $this->methodUseClasses)) {
+                    $this->methodUseClasses[] = $typeString;
+                }
+                $tmpArr = explode("\\", $typeString);
+                $typeString = array_pop($tmpArr);
+            }
+            $returnString = ": {$typeString}";
+        }
+        $searches = array("__METHOD_DOC__", "__METHOD__", "__PARAMETER__", "__RETURN_TYPE__", "__ARGUMENT__");
+        $replaces = array(
+            $method->getDocComment(),
+            $method->getName(),
+            trim($paramString, " ,"),
+            $returnString,
             trim($argumentString, " ,")
         );
         return str_replace($searches, $replaces, $this->template->getMethodTpl());
