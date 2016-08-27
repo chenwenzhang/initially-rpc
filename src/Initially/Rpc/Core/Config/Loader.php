@@ -13,12 +13,14 @@ class Loader
      *   <format>
      *     {
      *       "global": {
-     *         "url": ""
+     *         "url": "",
+     *         "transport": ""
      *       },
      *       "services": [
      *         {
      *           "interface": "",
-     *           "url": ""
+     *           "url": "",
+     *           "transport": ""
      *         },
      *         ...
      *       ]

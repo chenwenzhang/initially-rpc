@@ -15,14 +15,21 @@ class Client
     private $interface;
 
     /**
+     * @var string
+     */
+    private $transport;
+
+    /**
      * Client constructor.
      * @param string $url
      * @param string $interface
+     * @param string $transport
      */
-    public function __construct($url, $interface)
+    public function __construct($url, $interface, $transport)
     {
         $this->url = $url;
         $this->interface = $interface;
+        $this->transport = $transport;
     }
 
     /**
@@ -55,6 +62,22 @@ class Client
     public function setInterface($interface)
     {
         $this->interface = $interface;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * @param string $transport
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
     }
 
 }
