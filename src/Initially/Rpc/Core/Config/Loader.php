@@ -43,20 +43,25 @@ class Loader
 
         $globalConfig = isset($clientConfig["global"]) ? $clientConfig["global"] : array();
         $isSetGlobalUrl = isset($globalConfig["url"]);
+        $isSetGlobalTransport = isset($globalConfig["transport"]);
         if (isset($clientConfig["services"]) && !empty($clientConfig["services"])) {
             foreach ($clientConfig["services"] as $serviceConfig) {
                 if (
                     !is_array($serviceConfig) ||
                     !isset($serviceConfig["interface"]) ||
-                    (
-                        !isset($serviceConfig["url"]) &&
-                        !$isSetGlobalUrl
-                    )
+                    (!isset($serviceConfig["url"]) && !$isSetGlobalUrl) ||
+                    (!isset($serviceConfig["transport"]) && !$isSetGlobalTransport)
                 ) {
                     throw new InitiallyRpcException("Client service config error");
                 }
-                $url = isset($serviceConfig["url"]) ? $serviceConfig["url"] : $globalConfig["url"];
-                Factory::setClient($serviceConfig["interface"], new Client($url, $serviceConfig["interface"]));
+                $url = isset($serviceConfig["url"]) ?
+                    $serviceConfig["url"] : $globalConfig["url"];
+                $transport = isset($serviceConfig["transport"]) ?
+                    $serviceConfig["transport"] : $globalConfig["transport"];
+                Factory::setClient(
+                    $serviceConfig["interface"],
+                    new Client($url, $serviceConfig["interface"], $transport)
+                );
             }
         }
     }
