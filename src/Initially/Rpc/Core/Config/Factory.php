@@ -9,16 +9,22 @@ class Factory
 {
 
     /**
+     * Server config mapping
+     *
      * @var array
      */
     private static $serverMapping = array();
 
     /**
+     * Client config mapping
+     *
      * @var array
      */
     private static $clientMapping = array();
 
     /**
+     * Get server config
+     *
      * @param $key
      * @return Server
      * @throws InitiallyRpcException
@@ -26,12 +32,15 @@ class Factory
     public static function getServer($key)
     {
         if (!isset(self::$serverMapping[$key])) {
-            throw new InitiallyRpcException("");
+            throw new InitiallyRpcException("server interface undefined");
         }
+
         return self::$serverMapping[$key];
     }
 
     /**
+     * Get all server config
+     *
      * @return array
      */
     public static function getServerAll()
@@ -40,6 +49,8 @@ class Factory
     }
 
     /**
+     * Set server config
+     *
      * @param string $key
      * @param Server $config
      */
@@ -49,6 +60,8 @@ class Factory
     }
 
     /**
+     * Get client config
+     *
      * @param string $key
      * @return Client
      * @throws InitiallyRpcException
@@ -56,12 +69,15 @@ class Factory
     public static function getClient($key)
     {
         if (!isset(self::$clientMapping[$key])) {
-            throw new InitiallyRpcException("");
+            throw new InitiallyRpcException("client interface undefined");
         }
+
         return self::$clientMapping[$key];
     }
 
     /**
+     * Get all client config
+     *
      * @return array
      */
     public static function getClientAll()
@@ -70,6 +86,8 @@ class Factory
     }
 
     /**
+     * Set client config
+     *
      * @param string $key
      * @param Client $config
      */
