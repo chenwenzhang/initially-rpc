@@ -3,6 +3,7 @@ namespace Initially\Rpc\Core\Engine;
 
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
+use Initially\Rpc\Core\Config\Server as ServerConfig;
 use Initially\Rpc\Core\Web\App;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Protocol\Invocation;
@@ -35,6 +36,7 @@ class ServerApplication implements Application
 
     /**
      * ServerApplication constructor.
+     *
      * @param string $configFile
      * @throws InitiallyRpcException
      */
@@ -44,12 +46,11 @@ class ServerApplication implements Application
         if ($this->configFile === false) {
             throw new InitiallyRpcException("Server config file error");
         }
-
-        $this->transport = new Transport();
-        $this->protocol = new Protocol();
     }
 
     /**
+     * Server run
+     *
      * @throws InitiallyRpcException
      */
     public function run()
@@ -61,16 +62,28 @@ class ServerApplication implements Application
         // load server config
         ConfigLoader::loadServer($this->configFile);
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $this->setTransport();
+            $this->setProtocol();
+
             $request = $this->transport->receive();
             $interface = $request->getInterface();
             $target = $this->getTarget($interface);
             $invoker = $this->protocol->export($target);
             $invocation = new Invocation($request->getMethodName(), $request->getArguments());
-            $invoker->invoke($invocation);
+            $response = $invoker->invoke($invocation);
+            $this->transport->reply($response);
         } else {
             $webApp = new App();
             $webApp->handle();
         }
+    }
+
+    /**
+     * Set transport
+     */
+    private function setTransport()
+    {
+        $this->transport = Transport::factory(ConfigFactory::getServerTransportProtocol());
     }
 
     /**
@@ -79,6 +92,14 @@ class ServerApplication implements Application
     public function getTransport()
     {
         return $this->transport;
+    }
+
+    /**
+     * Set protocol
+     */
+    private function setProtocol()
+    {
+        $this->protocol = new Protocol();
     }
 
     /**
@@ -108,6 +129,7 @@ class ServerApplication implements Application
         if (!class_exists($reference)) {
             throw new InitiallyRpcException("reference class not exists");
         }
+
         return new $reference();
     }
 
@@ -120,6 +142,7 @@ class ServerApplication implements Application
         if (is_null(self::$instance)) {
             throw new InitiallyRpcException("server application is not global");
         }
+
         return self::$instance;
     }
 

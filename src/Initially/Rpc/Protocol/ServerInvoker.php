@@ -25,7 +25,7 @@ class ServerInvoker implements Invoker
 
     /**
      * @param Invocation $invocation
-     * @return mixed
+     * @return Response
      * @throws InitiallyRpcException
      */
     public function invoke(Invocation $invocation)
@@ -42,7 +42,7 @@ class ServerInvoker implements Invoker
 
         $response = new Response();
         $response->setResult($result);
-        ServerApplication::getInstance()->getTransport()->reply($response);
+        return $response;
     }
 
 }

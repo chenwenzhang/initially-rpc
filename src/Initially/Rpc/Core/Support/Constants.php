@@ -8,7 +8,7 @@ class Constants
 
     const ROOT_PATH = INITIALLY_RPC_ROOT;
 
-    const VAR_PATH = self::ROOT_PATH . "/var";
+    const VAR_PATH = INITIALLY_RPC_ROOT . "/var";
 
     const CACHE_CONFIG_INFO_FILENAME = "ClientConfigInfo.cache";
 

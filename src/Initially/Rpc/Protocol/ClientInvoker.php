@@ -1,7 +1,7 @@
 <?php
 namespace Initially\Rpc\Protocol;
 
-use Initially\Rpc\Core\Config\Client\Client;
+use Initially\Rpc\Core\Config\Client;
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Request;

@@ -8,7 +8,7 @@ class Protocol
 {
 
     /**
-     * @param string $target
+     * @param object $target
      * @return ServerInvoker
      */
     public function export($target)

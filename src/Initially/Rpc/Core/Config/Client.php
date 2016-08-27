@@ -1,5 +1,5 @@
 <?php
-namespace Initially\Rpc\Core\Config\Client;
+namespace Initially\Rpc\Core\Config;
 
 class Client
 {

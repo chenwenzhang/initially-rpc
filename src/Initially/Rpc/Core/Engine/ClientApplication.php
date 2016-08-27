@@ -1,7 +1,7 @@
 <?php
 namespace Initially\Rpc\Core\Engine;
 
-use Initially\Rpc\Core\Config\Client\Client;
+use Initially\Rpc\Core\Config\Client;
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
 use Initially\Rpc\Core\Support\Util;

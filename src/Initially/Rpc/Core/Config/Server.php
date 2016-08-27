@@ -1,5 +1,5 @@
 <?php
-namespace Initially\Rpc\Core\Config\Server;
+namespace Initially\Rpc\Core\Config;
 
 class Server
 {

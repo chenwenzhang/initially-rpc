@@ -1,8 +1,8 @@
 <?php
 namespace Initially\Rpc\Core\Config;
 
-use Initially\Rpc\Core\Config\Client\Client;
-use Initially\Rpc\Core\Config\Server\Server;
+use Initially\Rpc\Core\Config\Client;
+use Initially\Rpc\Core\Config\Server;
 use Initially\Rpc\Exception\InitiallyRpcException;
 
 class Loader
@@ -92,6 +92,12 @@ class Loader
         $serverConfig = json_decode(file_get_contents($configFile), true);
         if (!is_array($serverConfig)) {
             throw new InitiallyRpcException("Server config error");
+        }
+
+        if (!isset($serviceConfig["transport"])) {
+            throw new InitiallyRpcException("Server transport undefined");
+        } else {
+            Factory::setServerTransportProtocol($serviceConfig["transport"]);
         }
 
         if (isset($serverConfig["services"]) && !empty($serverConfig["services"])) {

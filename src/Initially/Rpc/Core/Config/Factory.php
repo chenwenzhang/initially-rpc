@@ -1,8 +1,8 @@
 <?php
 namespace Initially\Rpc\Core\Config;
 
-use Initially\Rpc\Core\Config\Client\Client;
-use Initially\Rpc\Core\Config\Server\Server;
+use Initially\Rpc\Core\Config\Client;
+use Initially\Rpc\Core\Config\Server;
 use Initially\Rpc\Exception\InitiallyRpcException;
 
 class Factory
@@ -14,6 +14,11 @@ class Factory
      * @var array
      */
     private static $serverMapping = array();
+
+    /**
+     * @var string
+     */
+    private static $serverTransportProtocol;
 
     /**
      * Client config mapping
@@ -57,6 +62,22 @@ class Factory
     public static function setServer($key, Server $config)
     {
         self::$serverMapping[$key] = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getServerTransportProtocol()
+    {
+        return self::$serverTransportProtocol;
+    }
+
+    /**
+     * @param string $serverTransportProtocol
+     */
+    public static function setServerTransportProtocol($serverTransportProtocol)
+    {
+        self::$serverTransportProtocol = $serverTransportProtocol;
     }
 
     /**
