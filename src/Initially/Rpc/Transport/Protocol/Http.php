@@ -2,6 +2,9 @@
 namespace Initially\Rpc\Transport\Protocol;
 
 use Initially\Rpc\Exception\InitiallyRpcException;
+use Initially\Rpc\Transport\Formatter;
+use Initially\Rpc\Transport\Request;
+use Initially\Rpc\Transport\Response;
 
 class Http implements Protocol
 {
@@ -47,7 +50,28 @@ class Http implements Protocol
         } elseif ($httpCode != 200) {
             throw new InitiallyRpcException("Server error, HTTP Code: {$httpCode}. Server sent: {$result}");
         }
+
         return $result;
+    }
+
+    /**
+     * @return Request
+     */
+    public function receive()
+    {
+        $requestRaw = file_get_contents("php://input");
+        $request = Formatter::unserialize($requestRaw);
+        return $request;
+    }
+
+    /**
+     * @param Response $response
+     * @return mixed
+     */
+    public function reply(Response $response)
+    {
+        header("Content-Type: text/plain;charset=utf-8");
+        echo Formatter::serialize($response);
     }
 
     /**

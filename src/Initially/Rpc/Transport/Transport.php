@@ -1,67 +1,73 @@
 <?php
 namespace Initially\Rpc\Transport;
 
-use Initially\Rpc\Core\Config\Factory;
+use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Exception\InitiallyRpcException;
-use Initially\Rpc\Transport\Protocol\Http;
-use Throwable;
+use Initially\Rpc\Transport\Protocol\Factory as TransportProtocolFactory;
+use Initially\Rpc\Transport\Protocol\Protocol as TransportProtocol;
 
 class Transport
 {
 
     /**
+     * Http protocol
+     */
+    const PROTOCOL_HTTP = "http";
+
+    /**
+     * @var TransportProtocol
+     */
+    protected $protocol;
+
+    /**
+     * Transport constructor.
+     *
+     * @param $type
+     */
+    public function __construct($type)
+    {
+        $this->protocol = TransportProtocolFactory::getProtocol($type);
+    }
+
+    /**
+     * Send Rpc Request
+     *
      * @param Request $request
+     * @return mixed
      * @throws InitiallyRpcException
-     * @throws Throwable
      */
     public function send(Request $request)
     {
         $interface = $request->getInterface();
-        $config = Factory::getClient($interface);
+        $config = ConfigFactory::getClient($interface);
         $url = $config->getUrl();
+
         $requestRaw = Formatter::serialize($request);
-        $responseRaw = $this->postData($url, $requestRaw);
+        $responseRaw = $this->protocol->sendData($url, $requestRaw);
         $response = Formatter::unserialize($responseRaw);
         if (!($response instanceof Response)) {
             throw new InitiallyRpcException("illegal response");
         } elseif ($response->isHasException()) {
-            $exception = $response->getException();
-            throw new InitiallyRpcException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception->getPrevious()
-            );
+            $e = $response->getException();
+            throw new InitiallyRpcException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
+
         return $response->getResult();
     }
 
     /**
-     * @param string $uri
-     * @param string $data
-     * @return string
-     * @throws InitiallyRpcException
-     */
-    private function postData($uri, $data)
-    {
-        static $protocol;
-        if (!isset($protocol)) {
-            $protocol = new Http();
-        }
-
-        return $protocol->sendData($uri, $data);
-    }
-
-    /**
+     * Receive Rpc Request
+     *
      * @return Request
      * @throws InitiallyRpcException
      */
     public function receive()
     {
-        $requestRaw = file_get_contents("php://input");
-        $request = Formatter::unserialize($requestRaw);
+        $request = $this->receive();
         if (!($request instanceof Request)) {
             throw new InitiallyRpcException("illegal request");
         }
+
         return $request;
     }
 
@@ -72,8 +78,7 @@ class Transport
      */
     public function reply(Response $response)
     {
-        header("Content-Type: text/plain;charset=utf-8");
-        echo Formatter::serialize($response);
+        $this->reply($response);
     }
 
 }
