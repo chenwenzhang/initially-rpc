@@ -15,6 +15,11 @@ class Transport
     const PROTOCOL_HTTP = "http";
 
     /**
+     * @var array
+     */
+    protected static $transports;
+
+    /**
      * @var TransportProtocol
      */
     protected $protocol;
@@ -22,11 +27,27 @@ class Transport
     /**
      * Transport constructor.
      *
-     * @param $type
+     * @param string $type
      */
     public function __construct($type)
     {
         $this->protocol = TransportProtocolFactory::getProtocol($type);
+    }
+
+    /**
+     * Transport factory
+     *
+     * @param string $type
+     * @return Transport
+     */
+    public static function factory($type)
+    {
+        if (isset(self::$transports[$type])) {
+            return self::$transports[$type];
+        }
+
+        self::$transports[$type] = new Transport($type);
+        return self::$transports[$type];
     }
 
     /**
