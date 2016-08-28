@@ -46,14 +46,16 @@ class Loader
         $isSetGlobalTransport = isset($globalConfig["transport"]);
         if (isset($clientConfig["services"]) && !empty($clientConfig["services"])) {
             foreach ($clientConfig["services"] as $serviceConfig) {
-                if (
-                    !is_array($serviceConfig) ||
-                    !isset($serviceConfig["interface"]) ||
-                    (!isset($serviceConfig["url"]) && !$isSetGlobalUrl) ||
-                    (!isset($serviceConfig["transport"]) && !$isSetGlobalTransport)
-                ) {
-                    throw new InitiallyRpcException("Client service config error");
+                if (!is_array($serviceConfig)) {
+                    throw new InitiallyRpcException("Client config error: format error");
+                } else if (!isset($serviceConfig["interface"])) {
+                    throw new InitiallyRpcException("Client config error: undefined interface");
+                } else if (!isset($serviceConfig["url"]) && !$isSetGlobalUrl) {
+                    throw new InitiallyRpcException("Client config error: undefined url ({$serviceConfig['interface']})");
+                } else if (!isset($serviceConfig["transport"]) && !$isSetGlobalTransport) {
+                    throw new InitiallyRpcException("Client config error: undefined transport ({$serviceConfig['interface']})");
                 }
+
                 $url = isset($serviceConfig["url"]) ?
                     $serviceConfig["url"] : $globalConfig["url"];
                 $transport = isset($serviceConfig["transport"]) ?
@@ -94,10 +96,10 @@ class Loader
             throw new InitiallyRpcException("Server config error");
         }
 
-        if (!isset($serviceConfig["transport"])) {
+        if (!isset($serverConfig["transport"])) {
             throw new InitiallyRpcException("Server transport undefined");
         } else {
-            Factory::setServerTransportProtocol($serviceConfig["transport"]);
+            Factory::setServerTransportProtocol($serverConfig["transport"]);
         }
 
         if (isset($serverConfig["services"]) && !empty($serverConfig["services"])) {

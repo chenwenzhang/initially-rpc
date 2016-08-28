@@ -3,7 +3,6 @@ namespace Initially\Rpc\Core\Engine;
 
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Core\Config\Loader as ConfigLoader;
-use Initially\Rpc\Core\Config\Server as ServerConfig;
 use Initially\Rpc\Core\Web\App;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Protocol\Invocation;
@@ -55,12 +54,12 @@ class ServerApplication implements Application
      */
     public function run()
     {
-        // exception handler
-        set_exception_handler(array($this, "exceptionHandler"));
         // set as global
         $this->setAsGlobal();
         // load server config
         ConfigLoader::loadServer($this->configFile);
+        // exception handler
+        set_exception_handler(array($this, "exceptionHandler"));
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->setTransport();
             $this->setProtocol();
