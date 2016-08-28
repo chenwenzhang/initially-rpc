@@ -1,6 +1,7 @@
 <?php
 namespace Initially\Rpc\Transport;
 
+use Exception;
 use Initially\Rpc\Core\Config\Factory as ConfigFactory;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Protocol\Factory as TransportProtocolFactory;
@@ -84,7 +85,7 @@ class Transport
      */
     public function receive()
     {
-        $request = $this->receive();
+        $request = $this->protocol->receive();
         if (!($request instanceof Request)) {
             throw new InitiallyRpcException("illegal request");
         }
@@ -99,7 +100,7 @@ class Transport
      */
     public function reply(Response $response)
     {
-        $this->reply($response);
+        $this->protocol->reply($response);
     }
 
 }
