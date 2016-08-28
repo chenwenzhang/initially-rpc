@@ -20,7 +20,7 @@
   "autoload-dev": {
     "psr-4": {
       "InitiallyDemo\\": [
-        "test/client/Demo/",
+        "test/common/Demo/",
         "test/server/Demo/"
       ]
     }
