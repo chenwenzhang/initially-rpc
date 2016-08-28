@@ -1,8 +1,9 @@
 {
+  "transport": "http",
   "services": [
     {
-      "interface": "InitiallyDemo\\Common\\Interfaces\\UserQueryServiceInterface",
-      "reference": "InitiallyDemo\\Vendor\\Service\\UserQueryService"
+      "interface": "InitiallyDemo\\Common\\Interfaces\\DemoServiceInterface",
+      "reference": "InitiallyDemo\\Vendor\\Service\\DemoService"
     }
   ]
 }

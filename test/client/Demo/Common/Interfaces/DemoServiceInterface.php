@@ -1,19 +1,20 @@
 <?php
 namespace InitiallyDemo\Common\Interfaces;
 
-use InitiallyDemo\Common\Domain\VO\UserVO;
+use InitiallyDemo\Common\Domain\Entity\Demo;
 
-interface UserQueryServiceInterface
+interface DemoServiceInterface
 {
 
     /**
-     * @param $id
-     * @return UserVO
+     * @param int $id
+     * @return Demo
      */
     public function queryById($id);
 
     /**
-     * Add
+     * add
+     *
      * @param int $a
      * @param int $b
      * @return int

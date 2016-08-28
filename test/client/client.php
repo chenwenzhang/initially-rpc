@@ -4,10 +4,10 @@ include __DIR__ . "/../../vendor/autoload.php";
 $initiallyClientApplication = new \Initially\Rpc\Core\Engine\ClientApplication("client.json");
 $initiallyClientApplication->run();
 
-$userQueryService = new \Initially\Rpc\Api\InitiallyDemo\Common\Interfaces\UserQueryService();
-var_dump($userQueryService->add(1, 2));
+$demoService = new \Initially\Rpc\Api\InitiallyDemo\Common\Interfaces\DemoService();
+$addResult = $demoService->add(1, 2);
+var_dump($addResult);
 
-$userVO = $userQueryService->queryById(123);
-var_dump($userVO instanceof \InitiallyDemo\Common\Domain\VO\UserVO);
-var_dump($userVO->getId());
-var_dump($userVO->getUsername());
+$demo = $demoService->queryById(123);
+var_dump($demo->getId());
+var_dump($demo->getName());

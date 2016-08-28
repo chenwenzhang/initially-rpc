@@ -1,10 +1,11 @@
 {
   "global": {
-    "url": "http://localhost:8081/server.php"
+    "url": "http://localhost:8081/server.php",
+    "transport": "http"
   },
   "services": [
     {
-      "interface": "InitiallyDemo\\Common\\Interfaces\\UserQueryServiceInterface"
+      "interface": "InitiallyDemo\\Common\\Interfaces\\DemoServiceInterface"
     }
   ]
 }

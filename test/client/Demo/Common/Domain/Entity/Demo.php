@@ -1,7 +1,7 @@
 <?php
-namespace InitiallyDemo\Common\Domain\VO;
+namespace InitiallyDemo\Common\Domain\Entity;
 
-class UserVO
+class Demo
 {
 
     /**
@@ -12,7 +12,7 @@ class UserVO
     /**
      * @var string
      */
-    private $username;
+    private $name;
 
     /**
      * @return int
@@ -33,17 +33,17 @@ class UserVO
     /**
      * @return string
      */
-    public function getUsername()
+    public function getName()
     {
-        return $this->username;
+        return $this->name;
     }
 
     /**
-     * @param string $username
+     * @param string $name
      */
-    public function setUsername($username)
+    public function setName($name)
     {
-        $this->username = $username;
+        $this->name = $name;
     }
 
 }
