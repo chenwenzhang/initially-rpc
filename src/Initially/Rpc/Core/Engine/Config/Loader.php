@@ -102,11 +102,15 @@ class Loader
         }
 
         $clientConfig = new Client();
-        $clientConfig->setProxyRootDir($realProxyRootDir);
         $issetGlobalUrl = isset($config["url"]);
         $issetGlobalTransport = isset($config["transport"]);
         $issetGlobalUrl && $clientConfig->setUrl($config["url"]);
         $issetGlobalTransport && $clientConfig->setTransport($config["transport"]);
+        $clientConfig->setProxyRootDir($realProxyRootDir);
+        if (isset($config["replace"]) && is_array($config["replace"])) {
+            $clientConfig->setReplace($config["replace"]);
+        }
+
         if (isset($config["services"]) && is_array($config["services"]) && !empty($config["services"])) {
             foreach ($config["services"] as $key => $value) {
                 $issetUrl = isset($value["url"]);

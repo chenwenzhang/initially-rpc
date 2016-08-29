@@ -1,6 +1,9 @@
 <?php
 namespace Initially\Rpc\Proxy;
 
+use Initially\Rpc\Core\Engine\Client as ClientApp;
+use Initially\Rpc\Core\Engine\Config\Client as ClientConfig;
+use Initially\Rpc\Core\Support\Util;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use ReflectionClass;
 use ReflectionMethod;
@@ -9,9 +12,22 @@ abstract class BuilderAbstract
 {
 
     /**
-     * @var string
+     * Class template searches
      */
-    protected $proxyDir;
+    const CLASS_TPL_SEARCHES = array(
+        "__NAMESPACE__",
+        "__USE_LIST__",
+        "__CLASS_DOC__",
+        "__CLASS_NAME__",
+        "__INTERFACE_NAME__",
+        "__INTERFACE_NAME_FORMAT__",
+        "__METHOD__"
+    );
+
+    /**
+     * @var ClientConfig
+     */
+    protected $config;
 
     /**
      * @var TemplateAbstract
@@ -21,7 +37,12 @@ abstract class BuilderAbstract
     /**
      * @var string
      */
-    protected $interface;
+    protected $interface = "";
+
+    /**
+     * @var array
+     */
+    protected $interfaceParseInfo = array();
 
     /**
      * @var array
@@ -34,53 +55,126 @@ abstract class BuilderAbstract
     protected $refectionClass;
 
     /**
+     * Interface suffix
+     *
      * @var string
      */
-    protected $proxyPrefixNamespace = "Initially\\Rpc\\Api";
-
-    /**
-     * @var string
-     */
-    protected $classNameRule = "/^([A-Za-z_][A-Za-z0-9_]*)Interface$/";
+    protected $interfaceSuffix = "Interface";
 
     /**
      * BuilderAbstract constructor.
      */
     public function __construct()
     {
-        $this->proxyDir = __DIR__ . "/../Api";
+        $this->config = ClientApp::getInstance()->getConfig();
         $this->template = $this->getTemplate();
-    }
-
-    /**
-     * @throws InitiallyRpcException
-     */
-    protected function proxyDirChecker()
-    {
-        if (!is_dir($this->proxyDir) && !@mkdir($this->proxyDir, 0777, true)) {
-            throw new InitiallyRpcException("Proxy directory create failed");
-        }
     }
 
     /**
      * Create proxy class
      *
      * @param string $interface
+     * @throws InitiallyRpcException
      */
     public function create($interface)
     {
-        $this->clear();
+        if (!Util::existsDirWritable($this->config->getProxyRootDir())) {
+            throw new InitiallyRpcException("Proxy builder error: proxy class root dir not to be write");
+        }
+
         $this->interface = $interface;
         $this->reflectionInterfaceAndCheck();
+        $info = $this->parseProxyClassInfo();
+        $dir = $this->getProxyClassDirAndCreate($info->getNamespace());
+        $file = sprintf("%s/%s.php", $dir, $info->getClassName());
 
+        $methodString = "";
+        foreach ($this->refectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            $methodString .= $this->buildMethod($method);
+        }
+
+        $useString = "";
+        foreach ($this->useList as $value) {
+            $useString .= "use {$value};" . PHP_EOL;
+        }
+
+        $replaces = array(
+            $info->getNamespace(),
+            $useString,
+            $this->refectionClass->getDocComment(),
+            $info->getClassName(),
+            sprintf("\\%s", $this->refectionClass->getName()),
+            str_replace("\\", "\\\\", $this->refectionClass->getName()),
+            $methodString
+        );
+        $content = str_replace(self::CLASS_TPL_SEARCHES, $replaces, $this->template->getClassTemplate());
+        if (!@file_put_contents($file, $content)) {
+            throw new InitiallyRpcException("Proxy builder error: proxy class code write failed");
+        }
+
+        $this->clear();
     }
 
     /**
-     * 获取模板类
-     *
-     * @return TemplateAbstract
+     * @throws InitiallyRpcException
      */
-    abstract protected function getTemplate();
+    protected function reflectionInterfaceAndCheck()
+    {
+        $this->refectionClass = new ReflectionClass($this->interface);
+        if (!$this->refectionClass->isInterface()) {
+            throw new InitiallyRpcException("Proxy builder error: client service must be interface");
+        }
+    }
+
+    /**
+     * Parse interface info
+     *
+     * @return ProxyClassInfo
+     * @throws InitiallyRpcException
+     */
+    protected function parseProxyClassInfo()
+    {
+        $arr = explode("\\", $this->interface);
+        $name = array_pop($arr);
+        $matches = array();
+        if (!preg_match($this->getClassNameRule(), $name, $matches)) {
+            throw new InitiallyRpcException("Proxy builder error: interface name must ending of 'Interface' like 'DemoServiceInterface'");
+        }
+
+        if (!empty($arr) && !empty($this->config->getReplace())) {
+            $replace = $this->config->getReplace();
+            foreach ($arr as $key => $value) {
+                if (isset($replace[$value])) {
+                    $arr[$key] = $replace[$value];
+                }
+            }
+        }
+
+        $namespace = implode("\\", $arr);
+        $info = new ProxyClassInfo();
+        $info->setNamespace($namespace);
+        $info->setClassName($matches[1]);
+
+        return $info;
+    }
+
+    /**
+     * Get proxy class dir and create it
+     *
+     * @param string $namespace
+     * @return string
+     * @throws InitiallyRpcException
+     */
+    protected function getProxyClassDirAndCreate($namespace)
+    {
+        $path = str_replace("\\", DIRECTORY_SEPARATOR, $namespace);
+        $dir = $this->config->getProxyRootDir() . DIRECTORY_SEPARATOR . $path;
+        if (Util::createDirIfNotExists($dir)) {
+            throw new InitiallyRpcException("Proxy builder error: get proxy class dir and create it");
+        }
+
+        return $dir;
+    }
 
     /**
      * Clear
@@ -93,18 +187,32 @@ abstract class BuilderAbstract
     }
 
     /**
-     * @throws InitiallyRpcException
+     * @return string
      */
-    protected function reflectionInterfaceAndCheck()
+    protected function getClassNameRule()
     {
-        if (!preg_match($this->classNameRule, $this->interface)) {
-            throw new InitiallyRpcException("interface name must ending of 'Interface' like 'DemoServiceInterface'");
+        static $rule;
+        if (isset($rule)) {
+            return $rule;
         }
 
-        $this->refectionClass = new ReflectionClass($this->interface);
-        if (!$this->refectionClass->isInterface()) {
-            throw new InitiallyRpcException("Client service must be interface");
-        }
+        $rule = sprintf("/^([A-Za-z_][A-Za-z0-9_]*)%s$/", $this->interfaceSuffix);
+        return $rule;
     }
+
+    /**
+     * Build method string
+     *
+     * @param ReflectionMethod $method
+     * @return string
+     */
+    abstract protected function buildMethod(ReflectionMethod $method);
+
+    /**
+     * Get template class
+     *
+     * @return TemplateAbstract
+     */
+    abstract protected function getTemplate();
 
 }

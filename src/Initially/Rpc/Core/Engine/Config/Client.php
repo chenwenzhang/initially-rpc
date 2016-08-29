@@ -22,6 +22,11 @@ class Client
     /**
      * @var array
      */
+    private $replace = array();
+
+    /**
+     * @var array
+     */
     private $services = array();
 
     /**
@@ -70,6 +75,22 @@ class Client
     public function setProxyRootDir($proxyRootDir)
     {
         $this->proxyRootDir = $proxyRootDir;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReplace()
+    {
+        return $this->replace;
+    }
+
+    /**
+     * @param array $replace
+     */
+    public function setReplace(array $replace)
+    {
+        $this->replace = $replace;
     }
 
     /**

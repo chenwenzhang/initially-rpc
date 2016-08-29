@@ -19,7 +19,7 @@ class Util
         }
 
         $testFile = $dir . "/write_file_" . time() . ".txt";
-        if (file_put_contents($testFile, "TEST")) {
+        if (@file_put_contents($testFile, "WRITABLE TEST")) {
             return false;
         } else {
             @unlink($testFile);
@@ -32,13 +32,15 @@ class Util
      * Create directory if not exists
      *
      * @param string $dir
-     * @throws InitiallyRpcException
+     * @return bool
      */
     public static function createDirIfNotExists($dir)
     {
         if (!is_dir($dir) && !@mkdir($dir, 0777, true)) {
-            throw new InitiallyRpcException("create directory '{$dir}' failed");
+            return false;
         }
+
+        return true;
     }
 
     /**

@@ -1,8 +1,8 @@
 <?php
 namespace Initially\Rpc\Transport;
 
+use Exception;
 use Initially\Rpc\Core\Support\Version;
-use Throwable;
 
 class Response
 {
@@ -18,7 +18,7 @@ class Response
     private $result;
 
     /**
-     * @var Throwable
+     * @var Exception
      */
     private $exception;
 
@@ -61,7 +61,7 @@ class Response
     }
 
     /**
-     * @return Throwable
+     * @return Exception
      */
     public function getException()
     {
@@ -69,7 +69,7 @@ class Response
     }
 
     /**
-     * @param Throwable $exception
+     * @param Exception $exception
      */
     public function setException($exception)
     {
