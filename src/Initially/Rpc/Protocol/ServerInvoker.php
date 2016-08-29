@@ -34,7 +34,7 @@ class ServerInvoker implements Invoker
         $arguments = $invocation->getArguments();
         if (!method_exists($this->target, $methodName)) {
             throw new InitiallyRpcException("method not exists");
-        } elseif (empty($arguments)) {
+        } else if (empty($arguments)) {
             $result = call_user_func(array($this->target, $methodName));
         } else {
             $result = call_user_func_array(array($this->target, $methodName), $arguments);

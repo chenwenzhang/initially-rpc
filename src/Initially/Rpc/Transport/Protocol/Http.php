@@ -1,7 +1,9 @@
 <?php
 namespace Initially\Rpc\Transport\Protocol;
 
+use Initially\Rpc\Core\Engine\Server as ServerApp;
 use Initially\Rpc\Exception\InitiallyRpcException;
+use Initially\Rpc\Protocol\Invocation;
 use Initially\Rpc\Transport\Formatter;
 use Initially\Rpc\Transport\Request;
 use Initially\Rpc\Transport\Response;
@@ -72,6 +74,24 @@ class Http implements Protocol
     {
         header("Content-Type: text/plain;charset=utf-8");
         echo Formatter::serialize($response);
+    }
+
+    /**
+     * Handle
+     */
+    public function handle()
+    {
+        $requestMethod = strtoupper($_SERVER["REQUEST_METHOD"]);
+        if ($requestMethod === "POST") {
+            $request = $this->receive();
+            $target = ServerApp::getInstance()->getTarget($request->getInterface());
+            $invoker = ServerApp::getInstance()->getProtocol()->export($target);
+            $invocation = new Invocation($request->getMethodName(), $request->getArguments());
+            $response = $invoker->invoke($invocation);
+            $this->reply($response);
+        } else {
+            echo "GET";
+        }
     }
 
     /**

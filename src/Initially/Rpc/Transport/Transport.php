@@ -2,7 +2,7 @@
 namespace Initially\Rpc\Transport;
 
 use Exception;
-use Initially\Rpc\Core\Config\Factory as ConfigFactory;
+use Initially\Rpc\Core\Engine\Config\Factory as ConfigFactory;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Protocol\Factory as TransportProtocolFactory;
 use Initially\Rpc\Transport\Protocol\Protocol as TransportProtocol;
@@ -61,8 +61,8 @@ class Transport
     public function send(Request $request)
     {
         $interface = $request->getInterface();
-        $config = ConfigFactory::getClient($interface);
-        $url = $config->getUrl();
+        $service = ConfigFactory::getClient()->getService($interface);
+        $url = $service->getUrl();
 
         $requestRaw = Formatter::serialize($request);
         $responseRaw = $this->protocol->sendData($url, $requestRaw);
@@ -101,6 +101,14 @@ class Transport
     public function reply(Response $response)
     {
         $this->protocol->reply($response);
+    }
+
+    /**
+     * Handle
+     */
+    public function handle()
+    {
+        $this->protocol->handle();
     }
 
 }

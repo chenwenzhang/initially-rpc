@@ -1,8 +1,8 @@
 <?php
 namespace Initially\Rpc\Protocol;
 
-use Initially\Rpc\Core\Config\Client;
-use Initially\Rpc\Core\Config\Factory as ConfigFactory;
+use Initially\Rpc\Core\Engine\Config\Client as ClientConfig;
+use Initially\Rpc\Core\Engine\Config\Factory as ConfigFactory;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Request;
 use Initially\Rpc\Transport\Transport;
@@ -16,7 +16,7 @@ class ClientInvoker implements Invoker
     private $interface;
 
     /**
-     * @var Client
+     * @var ClientConfig
      */
     private $config;
 
@@ -28,7 +28,7 @@ class ClientInvoker implements Invoker
     public function __construct($interface)
     {
         $this->interface = $interface;
-        $this->config = ConfigFactory::getClient($interface);
+        $this->config = ConfigFactory::getClient();
     }
 
     /**

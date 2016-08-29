@@ -25,8 +25,12 @@ interface Protocol
 
     /**
      * @param Response $response
-     * @return mixed
      */
     public function reply(Response $response);
+
+    /**
+     * Handle
+     */
+    public function handle();
 
 }
