@@ -42,11 +42,6 @@ abstract class BuilderAbstract
     /**
      * @var array
      */
-    protected $interfaceParseInfo = array();
-
-    /**
-     * @var array
-     */
     protected $useList = array();
 
     /**
@@ -94,6 +89,7 @@ abstract class BuilderAbstract
         }
 
         $useString = "";
+        $this->useList = array_unique($this->useList);
         foreach ($this->useList as $value) {
             $useString .= "use {$value};" . PHP_EOL;
         }
