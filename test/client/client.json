@@ -1,6 +1,11 @@
 {
   "url": "http://localhost:8081/server.php",
   "transport": "http",
+  "proxyRootDir": "../",
+  "replace": {
+    "Common": "Vendor",
+    "Interfaces": "Service"
+  },
   "services": [
     {
       "interface": "InitiallyDemo\\Common\\Interfaces\\DemoServiceInterface"

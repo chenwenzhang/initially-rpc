@@ -26,7 +26,7 @@ class Client
         $this->config = ConfigFactory::getClient();
     }
 
-    public function run()
+    public function buildProxyOrNot()
     {
 
     }

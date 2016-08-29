@@ -44,6 +44,9 @@ class Server
         set_exception_handler(array($this, "exceptionHandler"));
     }
 
+    /**
+     * Handle
+     */
     public function handle()
     {
         $this->transport->handle();

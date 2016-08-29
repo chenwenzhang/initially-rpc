@@ -7,34 +7,27 @@ class Util
 {
 
     /**
-     * Record client config file info
+     * 存在的目录是否可写
      *
-     * @param array $arr
+     * @param $dir
+     * @return bool
      */
-    public static function recordClientConfigFileInfo(array $arr)
+    public static function existsDirWritable($dir)
     {
-        $varDir = Constants::VAR_PATH;
-        $cacheFilename = Constants::CACHE_CONFIG_INFO_FILENAME;
-        self::createDirIfNotExists($varDir);
-        $cacheFile = $varDir . "/" . $cacheFilename;
-        file_put_contents($cacheFile, serialize($arr));
-    }
-
-    /**
-     * Get client config file info
-     *
-     * @return mixed|null
-     */
-    public static function getClientConfigFileInfo()
-    {
-        $cacheFile = Constants::VAR_PATH . "/" . Constants::CACHE_CONFIG_INFO_FILENAME;
-        if (!is_file($cacheFile)) {
-            return null;
+        if (!is_dir($dir)) {
+            return false;
         }
-        return unserialize(file_get_contents($cacheFile));
+
+        $testFile = $dir . "/write_file_" . time() . ".txt";
+        if (file_put_contents($testFile, "TEST")) {
+            return false;
+        } else {
+            @unlink($testFile);
+        }
+
+        return true;
     }
-
-
+    
     /**
      * Create directory if not exists
      *

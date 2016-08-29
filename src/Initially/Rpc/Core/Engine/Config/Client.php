@@ -15,6 +15,11 @@ class Client
     private $transport = "";
 
     /**
+     * @var string
+     */
+    private $proxyRootDir = "";
+
+    /**
      * @var array
      */
     private $services = array();
@@ -49,6 +54,22 @@ class Client
     public function setTransport($transport)
     {
         $this->transport = $transport;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyRootDir()
+    {
+        return $this->proxyRootDir;
+    }
+
+    /**
+     * @param string $proxyRootDir
+     */
+    public function setProxyRootDir($proxyRootDir)
+    {
+        $this->proxyRootDir = $proxyRootDir;
     }
 
     /**

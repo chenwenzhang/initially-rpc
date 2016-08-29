@@ -65,6 +65,11 @@ class Loader
      *     {
      *       "url": "",
      *       "transport": "",
+     *       "proxyRootDir": "", // 代理类根目录，相对于配置文件存放的目录，目录必须存在
+     *       "replace": { // 接口命名空间中需要替换的字段
+     *         "search1": "replace1",
+     *         "search2": "replace2"
+     *       },
      *       "services": [
      *         {
      *           "interface": "",
@@ -86,9 +91,18 @@ class Loader
         $config = json_decode($content, true);
         if (!is_array($config)) {
             throw new InitiallyRpcException("Client config error: format error");
+        } else if (!isset($config["proxyRootDir"])) {
+            throw new InitiallyRpcException("Client config error: proxy root dir undefined");
+        }
+
+        $configDir = dirname($configFile);
+        $realProxyRootDir = realpath($configDir . "/" . $config["proxyRootDir"]);
+        if ($realProxyRootDir === false) {
+            throw new InitiallyRpcException("Client config error: proxy dir not exists");
         }
 
         $clientConfig = new Client();
+        $clientConfig->setProxyRootDir($realProxyRootDir);
         $issetGlobalUrl = isset($config["url"]);
         $issetGlobalTransport = isset($config["transport"]);
         $issetGlobalUrl && $clientConfig->setUrl($config["url"]);
