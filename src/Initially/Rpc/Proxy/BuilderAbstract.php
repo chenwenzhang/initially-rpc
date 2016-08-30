@@ -54,7 +54,7 @@ abstract class BuilderAbstract
      *
      * @var string
      */
-    protected $interfaceSuffix = "Interface";
+    protected $interfaceEndOf = "Interface";
 
     /**
      * BuilderAbstract constructor.
@@ -134,7 +134,7 @@ abstract class BuilderAbstract
         $name = array_pop($arr);
         $matches = array();
         if (!preg_match($this->getClassNameRule(), $name, $matches)) {
-            throw new InitiallyRpcException("Proxy builder error: interface name must ending of 'Interface' like 'DemoServiceInterface'");
+            throw new InitiallyRpcException("Proxy builder error: interface name must ending of '{$this->interfaceEndOf}' like 'DemoService{$this->interfaceEndOf}'");
         }
 
         if (!empty($arr) && !empty($this->config->getReplace())) {
@@ -192,7 +192,7 @@ abstract class BuilderAbstract
             return $rule;
         }
 
-        $rule = sprintf("/^([A-Za-z_][A-Za-z0-9_]*)%s$/", $this->interfaceSuffix);
+        $rule = sprintf("/^([A-Za-z_][A-Za-z0-9_]*)%s$/", $this->interfaceEndOf);
         return $rule;
     }
 
