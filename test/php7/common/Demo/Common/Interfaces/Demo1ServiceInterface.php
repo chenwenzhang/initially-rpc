@@ -23,4 +23,13 @@ interface Demo1ServiceInterface
      */
     public function add(int $a, int $b): int;
 
+    /**
+     * 返回第一个数减第二个数的结果
+     *
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public function minus(int $a, int $b): int;
+
 }

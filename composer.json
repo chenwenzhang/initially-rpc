@@ -36,6 +36,9 @@
     }
   ],
   "scripts": {
-    "post-update-cmd": ""
+    "post-update-cmd": "Initially\\Rpc\\Core\\Engine\\ComposerScriptHandler::rebuildClientServiceProxy"
+  },
+  "extra": {
+    "initially-rpc-config-file": "test/php7/client/client.json"
   }
 }
