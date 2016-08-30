@@ -1,6 +1,6 @@
-.idea/
+/.idea/
 /vendor/
-composer.lock
-src/var/
-src/Initially/Rpc/Api/
-test/client/InitiallyDemo/
+/composer.lock
+/src/var/
+/var/
+/test/php5/client/InitiallyDemo/

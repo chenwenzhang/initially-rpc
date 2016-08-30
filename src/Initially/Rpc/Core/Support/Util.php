@@ -1,8 +1,6 @@
 <?php
 namespace Initially\Rpc\Core\Support;
 
-use Initially\Rpc\Exception\InitiallyRpcException;
-
 class Util
 {
 
