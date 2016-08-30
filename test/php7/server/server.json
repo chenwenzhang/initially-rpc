@@ -1,0 +1,9 @@
+{
+  "transport": "http",
+  "services": [
+    {
+      "interface": "InitiallyDemo\\Common\\Interfaces\\Demo1ServiceInterface",
+      "reference": "InitiallyDemo\\Vendor\\Service\\Demo1Service"
+    }
+  ]
+}

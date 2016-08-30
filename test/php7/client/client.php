@@ -4,7 +4,7 @@ include __DIR__ . "/../../../vendor/autoload.php";
 $initiallyClientApplication = new \Initially\Rpc\Core\Engine\Client("client.json");
 $initiallyClientApplication->buildProxyOrNot();
 
-$demoService = new \InitiallyDemo\Vendors\Service\DemoService();
+$demoService = new \InitiallyDemo\Vendors\Service\Demo1Service();
 $addResult = $demoService->add(1, 2);
 var_dump($addResult);
 

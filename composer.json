@@ -20,9 +20,9 @@
   "autoload-dev": {
     "psr-4": {
       "InitiallyDemo\\": [
-        "test/php5/client/InitiallyDemo/",
-        "test/php5/common/Demo/",
-        "test/php5/server/Demo/"
+        "test/php7/client/InitiallyDemo/",
+        "test/php7/common/Demo/",
+        "test/php7/server/Demo/"
       ]
     }
   },
