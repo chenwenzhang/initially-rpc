@@ -20,6 +20,7 @@
   "autoload-dev": {
     "psr-4": {
       "InitiallyDemo\\": [
+        "test/client/InitiallyDemo/",
         "test/common/Demo/",
         "test/server/Demo/"
       ]
@@ -35,6 +36,6 @@
     }
   ],
   "scripts": {
-    "post-update-cmd": "Initially\\Rpc\\Core\\Engine\\ComposerScriptHandler::rebuildClientServiceProxy"
+    "post-update-cmd": ""
   }
 }

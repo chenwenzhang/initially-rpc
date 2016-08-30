@@ -1,9 +1,9 @@
 {
   "url": "http://localhost:8081/server.php",
   "transport": "http",
-  "proxyRootDir": "../",
+  "proxyRootDir": "../client",
   "replace": {
-    "Common": "Vendor",
+    "Common": "Vendors",
     "Interfaces": "Service"
   },
   "services": [

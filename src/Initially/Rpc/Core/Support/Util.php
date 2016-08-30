@@ -19,7 +19,7 @@ class Util
         }
 
         $testFile = $dir . "/write_file_" . time() . ".txt";
-        if (@file_put_contents($testFile, "WRITABLE TEST")) {
+        if (!@file_put_contents($testFile, "WRITABLE TEST")) {
             return false;
         } else {
             @unlink($testFile);

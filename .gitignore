@@ -3,3 +3,4 @@
 composer.lock
 src/var/
 src/Initially/Rpc/Api/
+test/client/InitiallyDemo/

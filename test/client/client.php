@@ -2,9 +2,9 @@
 include __DIR__ . "/../../vendor/autoload.php";
 
 $initiallyClientApplication = new \Initially\Rpc\Core\Engine\Client("client.json");
+$initiallyClientApplication->buildProxyOrNot();
 
-
-$demoService = new \Initially\Rpc\Api\InitiallyDemo\Common\Interfaces\DemoService();
+$demoService = new \InitiallyDemo\Vendors\Service\DemoService();
 $addResult = $demoService->add(1, 2);
 var_dump($addResult);
 

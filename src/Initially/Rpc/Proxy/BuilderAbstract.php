@@ -165,7 +165,7 @@ abstract class BuilderAbstract
     {
         $path = str_replace("\\", DIRECTORY_SEPARATOR, $namespace);
         $dir = $this->config->getProxyRootDir() . DIRECTORY_SEPARATOR . $path;
-        if (Util::createDirIfNotExists($dir)) {
+        if (!Util::createDirIfNotExists($dir)) {
             throw new InitiallyRpcException("Proxy builder error: get proxy class dir and create it");
         }
 
