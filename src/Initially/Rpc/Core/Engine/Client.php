@@ -57,7 +57,7 @@ class Client
             throw new InitiallyRpcException("rpc framework root dir not to be write");
         }
 
-        if (!$this->configFileCompare()) {
+        if ($this->compareConfigFile()) {
             $services = $this->config->getServices();
             foreach ($services as $service) {
                 $this->builder->create($service->getInterface());
@@ -82,12 +82,12 @@ class Client
     }
 
     /**
-     * 比较配置文件的MD5,如果没有改变返回true,否则返回false
+     * 比较配置文件的MD5,如果没有改变返回false,否则返回true
      *
      * @return bool
      * @throws InitiallyRpcException
      */
-    private function configFileCompare()
+    private function compareConfigFile()
     {
         $cachePath = INITIALLY_RPC_ROOT_PATH . "/var";
         $cacheFile = $cachePath . "/info.cache";
