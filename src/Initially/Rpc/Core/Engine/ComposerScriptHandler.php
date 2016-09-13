@@ -26,17 +26,17 @@ class ComposerScriptHandler
                 $builder = $client->getBuilder();
                 $config = $client->getConfig();
                 $services = $config->getServices();
-                $io->write("build proxy start");
+                $io->write("Initially Rpc: build proxy start");
                 foreach ($services as $service) {
-                    $io->write("build {$service->getInterface()}");
+                    $io->write("Initially Rpc: build {$service->getInterface()}");
                     $builder->create($service->getInterface());
                 }
-                $io->write("build proxy end");
+                $io->write("Initially Rpc: build proxy end");
             } else {
-                $io->write("client config file error [\"{$configFile}\"]");
+                $io->write("Initially Rpc: client config file error [\"{$configFile}\"]");
             }
         } else {
-            $io->write("not configured composer extra [\"initially-rpc-config-file\"]");
+            $io->write("Initially Rpc: not configured composer extra [\"initially-rpc-config-file\"]");
         }
     }
 
