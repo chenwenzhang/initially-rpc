@@ -208,10 +208,10 @@ class LoggerProxy implements LoggerInterface
 
     /**
      * @param $name
-     * @param array $arguments
+     * @param $arguments
      * @return mixed
      */
-    public function __call($name, array $arguments)
+    protected function __call($name, $arguments)
     {
         if (self::isSetLogger() && method_exists(self::$logger, $name)) {
             return call_user_func_array(array(self::$logger, $name), $arguments);
