@@ -89,7 +89,7 @@ class Client
      */
     private function compareConfigFile()
     {
-        $cachePath = INITIALLY_RPC_ROOT_PATH . "/var";
+        $cachePath = INITIALLY_RPC_ROOT_PATH . "/src";
         $cacheFile = $cachePath . "/info.cache";
         Util::createDirIfNotExists($cachePath);
         $configSha1 = sha1_file($this->configFile);

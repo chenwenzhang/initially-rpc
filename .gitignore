@@ -1,6 +1,7 @@
 /.idea/
 /vendor/
 /composer.lock
+/src/info.cache
 /src/var/
 /var/
 /test/php5/client/InitiallyDemo/
