@@ -70,8 +70,12 @@ class Transport
         if (!($response instanceof Response)) {
             throw new InitiallyRpcException("illegal response");
         } elseif ($response->isHasException()) {
-            $e = $response->getException();
-            throw new InitiallyRpcException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            $exception = $response->getException();
+            if (class_exists($exception)) {
+                throw new $exception($response->getExceptionMessage());
+            } else {
+                throw new InitiallyRpcException($response->getExceptionMessage());
+            }
         }
 
         return $response->getResult();

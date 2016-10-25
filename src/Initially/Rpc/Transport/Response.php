@@ -18,9 +18,16 @@ class Response
     private $result;
 
     /**
-     * @var Exception
+     * class name of exception
+     * @var string
      */
     private $exception;
+
+    /**
+     * exception message
+     * @var string
+     */
+    private $exceptionMessage;
 
     /**
      * @var bool
@@ -61,7 +68,7 @@ class Response
     }
 
     /**
-     * @return Exception
+     * @return string
      */
     public function getException()
     {
@@ -69,11 +76,27 @@ class Response
     }
 
     /**
-     * @param Exception $exception
+     * @param string $exception
      */
     public function setException($exception)
     {
         $this->exception = $exception;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExceptionMessage()
+    {
+        return $this->exceptionMessage;
+    }
+
+    /**
+     * @param string $exceptionMessage
+     */
+    public function setExceptionMessage($exceptionMessage)
+    {
+        $this->exceptionMessage = $exceptionMessage;
     }
 
     /**

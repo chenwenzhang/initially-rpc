@@ -60,7 +60,8 @@ class Server
     public function exceptionHandler($e)
     {
         $response = new Response();
-        $response->setException($e);
+        $response->setException(get_class($e));
+        $response->setExceptionMessage($e->getMessage());
         $response->setHasException(true);
         $this->transport->reply($response);
     }
