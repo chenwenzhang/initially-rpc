@@ -3,12 +3,15 @@
   "transport": "http",
   "proxyRootDir": "../client",
   "replace": {
-    "Common": "Vendors",
-    "Interfaces": "Service"
+    "old": {
+      "Common": "Vendors",
+      "Interfaces": "Service"
+    }
   },
   "services": [
     {
-      "interface": "InitiallyDemo\\Common\\Interfaces\\Demo1ServiceInterface"
+      "interface": "InitiallyDemo\\Common\\Interfaces\\Demo1ServiceInterface",
+      "replace-key": "old"
     }
   ]
 }

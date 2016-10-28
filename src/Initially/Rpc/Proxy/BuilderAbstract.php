@@ -3,6 +3,7 @@ namespace Initially\Rpc\Proxy;
 
 use Initially\Rpc\Core\Engine\Client as ClientApp;
 use Initially\Rpc\Core\Engine\Config\Client as ClientConfig;
+use Initially\Rpc\Core\Engine\Config\Service;
 use Initially\Rpc\Core\Support\Util;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use ReflectionClass;
@@ -28,6 +29,11 @@ abstract class BuilderAbstract
      * @var ClientConfig
      */
     protected $config;
+
+    /**
+     * @var Service
+     */
+    protected $service;
 
     /**
      * @var TemplateAbstract
@@ -79,6 +85,7 @@ abstract class BuilderAbstract
 
         $this->interface = $interface;
         $this->reflectionInterfaceAndCheck();
+        $this->service = $this->config->getServiceByKey($this->interface);
         $info = $this->parseProxyClassInfo();
         $dir = $this->getProxyClassDirAndCreate($info->getNamespace());
         $file = sprintf("%s/%s.php", $dir, $info->getClassName());
@@ -137,11 +144,12 @@ abstract class BuilderAbstract
             throw new InitiallyRpcException("Proxy builder error: interface name must ending of '{$this->interfaceEndOf}' like 'DemoService{$this->interfaceEndOf}'");
         }
 
-        if (!empty($arr) && !empty($this->config->getReplace())) {
-            $replace = $this->config->getReplace();
+        $replace = $this->config->getReplace();
+        $replaceKey = $this->service->getReplaceKey();
+        if (!empty($arr) && !empty($replace) && isset($replace[$replaceKey])) {
             foreach ($arr as $key => $value) {
-                if (isset($replace[$value])) {
-                    $arr[$key] = $replace[$value];
+                if (isset($replace[$replaceKey][$value])) {
+                    $arr[$key] = $replace[$replaceKey][$value];
                 }
             }
         }

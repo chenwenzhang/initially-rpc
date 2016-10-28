@@ -25,6 +25,11 @@ class Service
     private $reference;
 
     /**
+     * @var string
+     */
+    private $replaceKey;
+
+    /**
      * @return string
      */
     public function getInterface()
@@ -86,6 +91,22 @@ class Service
     public function setReference($reference)
     {
         $this->reference = $reference;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplaceKey()
+    {
+        return $this->replaceKey;
+    }
+
+    /**
+     * @param string $replaceKey
+     */
+    public function setReplaceKey($replaceKey)
+    {
+        $this->replaceKey = $replaceKey;
     }
 
 }

@@ -74,7 +74,8 @@ class Loader
      *         {
      *           "interface": "",
      *           "url": "",
-     *           "transport": ""
+     *           "transport": "",
+     *           "replace-key": ""
      *         },
      *         ...
      *       ]
@@ -115,6 +116,7 @@ class Loader
             foreach ($config["services"] as $key => $value) {
                 $issetUrl = isset($value["url"]);
                 $issetTransport = isset($value["transport"]);
+                $issetReplaceKey = isset($value["replace-key"]);
                 if (!is_array($value)) {
                     throw new InitiallyRpcException("Client config error: undefined service");
                 } else if (!isset($value["interface"])) {
@@ -129,6 +131,7 @@ class Loader
                 $service->setInterface($value["interface"]);
                 $service->setUrl($issetUrl ? $value["url"] : $clientConfig->getUrl());
                 $service->setTransport($issetTransport ? $value["transport"] : $clientConfig->getTransport());
+                $service->setReplaceKey($issetReplaceKey ? $value["replace-key"] : "");
                 $clientConfig->addService($service);
             }
         }

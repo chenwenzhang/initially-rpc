@@ -111,6 +111,15 @@ class Client
     }
 
     /**
+     * @param string $key
+     * @return Service
+     */
+    public function getServiceByKey($key)
+    {
+        return $this->services[$key];
+    }
+
+    /**
      * @param Service $service
      */
     public function addService(Service $service)
