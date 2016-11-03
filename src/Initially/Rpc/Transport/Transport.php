@@ -71,10 +71,14 @@ class Transport
             throw new InitiallyRpcException("illegal response");
         } elseif ($response->isHasException()) {
             $exception = $response->getException();
-            if (class_exists($exception)) {
-                throw new $exception($response->getExceptionMessage());
-            } else {
-                throw new InitiallyRpcException($response->getExceptionMessage());
+            if (is_object($exception) && $exception instanceof Exception) {
+                throw $exception;
+            } else if (is_string($exception)) {
+                if (class_exists($exception)) {
+                    throw new $exception($response->getExceptionMessage());
+                } else {
+                    throw new InitiallyRpcException($response->getExceptionMessage());
+                }
             }
         }
 
