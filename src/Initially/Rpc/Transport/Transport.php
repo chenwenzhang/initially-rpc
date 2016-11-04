@@ -3,6 +3,7 @@ namespace Initially\Rpc\Transport;
 
 use Exception;
 use Initially\Rpc\Core\Engine\Config\Factory as ConfigFactory;
+use Initially\Rpc\Core\Support\LoggerProxy;
 use Initially\Rpc\Exception\InitiallyRpcException;
 use Initially\Rpc\Transport\Protocol\Factory as TransportProtocolFactory;
 use Initially\Rpc\Transport\Protocol\Protocol as TransportProtocol;
@@ -66,8 +67,9 @@ class Transport
 
         $requestRaw = Formatter::serialize($request);
         $responseRaw = $this->protocol->sendData($url, $requestRaw);
-        $response = Formatter::unserialize($responseRaw);
+        $response = @Formatter::unserialize($responseRaw);
         if (!($response instanceof Response)) {
+            LoggerProxy::getInstance()->error("illegal response", array($responseRaw));
             throw new InitiallyRpcException("illegal response");
         } elseif ($response->isHasException()) {
             $exception = $response->getException();
