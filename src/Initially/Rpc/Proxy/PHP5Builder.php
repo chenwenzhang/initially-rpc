@@ -10,7 +10,7 @@ class PHP5Builder extends BuilderAbstract
     /**
      * Method template searches
      */
-    const METHOD_TPL_SEARCHES = array(
+    private static $methodTplSearches = array(
         "__METHOD_DOC__",
         "__METHOD__",
         "__PARAMETER__",
@@ -40,7 +40,7 @@ class PHP5Builder extends BuilderAbstract
             $paramString,
             $argString
         );
-        return str_replace(self::METHOD_TPL_SEARCHES, $replaces, $this->template->getMethodTemplate());
+        return str_replace(self::$methodTplSearches, $replaces, $this->template->getMethodTemplate());
     }
 
     /**
